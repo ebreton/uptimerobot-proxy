@@ -18,7 +18,7 @@ def index():
     return render_template("list.html", events=storage.store)
 
 
-@app.route('/add', methods=['POST'])
+@app.route('/add', methods=['GET', 'POST'])
 def add():
     event = trigger_event(request.args)
     storage.insert(event)
@@ -27,7 +27,7 @@ def add():
 
 @app.route('/flush/<int:size>')
 def flush(size):
-    flash('flushed {} events'.format(len(storage)-size))
+    flash('flushed {} events'.format(max(0, len(storage)-size)))
     storage.flush(size)
     return redirect(url_for('index'))
 
