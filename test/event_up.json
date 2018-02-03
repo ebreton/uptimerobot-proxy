@@ -1,0 +1,10 @@
+{
+    "monitorID": 123,
+    "monitorURL": "http: //localhost",
+    "monitorFriendlyName": "unittest",
+    "alertType": 2,
+    "alertTypeFriendlyName": "Up",
+    "alertDetails": "for testing purpose",
+    "alertDuration": 99,
+    "monitorAlertContacts": "457;2;john@doe.com - alertContactID;alertContactType, alertContactValue"
+}
