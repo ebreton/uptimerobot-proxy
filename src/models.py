@@ -24,4 +24,4 @@ class Event:
         self.alert_duration = alert_duration
 
     def __repr__(self):
-        return "<Event for {0.monitor_name}: {0.alert_name} ({0.alert_type}) since {0.alert_duration}>".format(self)
+        return "<Event ({0.alert_type}) for {0.monitor_name}: {0.alert_name} since {0.alert_duration}>".format(self)

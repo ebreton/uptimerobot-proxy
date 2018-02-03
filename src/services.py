@@ -1,11 +1,11 @@
 from models import Event
 
 
-def trigger_event(json_data):
+def trigger_event(data):
     return Event(
-        json_data.get('monitorFriendlyName'),
-        json_data.get('alertType'),
-        json_data.get('alertTypeFriendlyName'),
-        json_data.get('alertDetails'),
-        json_data.get('alertDuration'),
+        data.get('monitorFriendlyName'),
+        data.get('alertType'),
+        data.get('alertTypeFriendlyName'),
+        data.get('alertDetails'),
+        data.get('alertDuration'),
     )

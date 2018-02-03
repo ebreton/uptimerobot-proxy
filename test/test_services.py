@@ -1,23 +1,21 @@
-import os
-import json
 import pytest
+from . import load_up, load_down
 
 from services import trigger_event
-from settings import TEST_PATH
 
 
 @pytest.fixture
 def up():
-    file_path = os.path.join(TEST_PATH, 'event_up.json')
-    with open(file_path) as input:
-        return json.load(input)
+    return load_up()
 
 
 @pytest.fixture
 def down():
-    file_path = os.path.join(TEST_PATH, 'event_down.json')
-    with open(file_path) as input:
-        return json.load(input)
+    return load_down()
+
+
+def test_format(up):
+    assert "{}".format(trigger_event(up)) == "<Event (2) for unittest: Up since 99>"
 
 
 def test_trigger_up(up):
