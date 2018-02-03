@@ -1,24 +1,38 @@
-from flask import Flask, request
+from flask import Flask, request, render_template, redirect, flash, url_for
 
+from models import Store
 from services import trigger_event
 from settings import VERSION
 
 app = Flask(__name__)
-store = []
+
+# set secret to create secured sessions
+app.secret_key = 'some_secret'
+
+# storage in memory for this first version
+storage = Store()
 
 
 @app.route('/')
 def index():
-    return '{} events received'.format(len(store))
-
-
-@app.route('/version')
-def version():
-    return VERSION
+    return render_template("list.html", events=storage.store)
 
 
 @app.route('/add', methods=['POST'])
 def add():
     event = trigger_event(request.args)
-    store.append(event)
+    storage.insert(event)
     return "Stored {}".format(event)
+
+
+@app.route('/flush/<int:size>')
+def flush(size):
+    flash('flushed {} events'.format(len(storage)-size))
+    storage.flush(size)
+    return redirect(url_for('index'))
+
+
+@app.route('/version')
+def version():
+    flash(VERSION)
+    return redirect(url_for('index'))

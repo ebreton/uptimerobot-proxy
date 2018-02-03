@@ -1,0 +1,15 @@
+<!doctype html>
+<title>Uptimerobot Proxy</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+<div class="page">
+  <h1>UptimeRobot Proxy</h1>
+  <div class="metanav">
+    <a href="{{ url_for('index') }}">Home</a>
+    <a href="{{ url_for('flush', size=2) }}">Flush</a>
+    <a href="{{ url_for('version') }}">Version</a>
+  </div>
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  {% block body %}{% endblock %}
+</div>

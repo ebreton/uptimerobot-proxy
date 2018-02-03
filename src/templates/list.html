@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block body %}
+  <ul class="entries">
+  {% for event in events %}
+    <li>
+      <h2>{{ event.monitor_name }} {{ event.alert_name }} <em>({{ event.alert_duration }})</em></h2> 
+      {{ event.timestamp }} | {{ event.alert_details|safe }}
+    </li>
+  {% endfor %}
+  </ul>
+{% endblock %}

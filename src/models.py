@@ -12,11 +12,15 @@
       - sslExpiryDate: only for SSL expiry notifications
       - sslExpiryDaysLeft: only for SSL expiry notifications
 """
+from datetime import datetime
+from collections import deque
+from itertools import islice
 
 
 class Event:
 
     def __init__(self, monitor_name, alert_type, alert_name, alert_details, alert_duration):
+        self.timestamp = datetime.now()
         self.monitor_name = monitor_name
         self.alert_type = alert_type
         self.alert_name = alert_name
@@ -25,3 +29,21 @@ class Event:
 
     def __repr__(self):
         return "<Event ({0.alert_type}) for {0.monitor_name}: {0.alert_name} since {0.alert_duration}>".format(self)
+
+
+class Store:
+
+    def __init__(self):
+        self.store = deque()
+
+    def flush(self, size):
+        self.store = deque(islice(self.store, 0, size))
+
+    def insert(self, item):
+        self.store.appendleft(item)
+
+    def __repr__(self):
+        return '<Store with {} events>'.format(len(self.store))
+
+    def __len__(self):
+        return len(self.store)
