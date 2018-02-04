@@ -15,7 +15,7 @@ def down():
 
 
 def test_format(up):
-    assert "{}".format(Event.create_event(up)) == "<Event (2) for unittest: Up since 99>"
+    assert repr(Event.create_event(up)) == "<Event (2) for unittest: Up since 99>"
 
 
 def test_create_up(up):

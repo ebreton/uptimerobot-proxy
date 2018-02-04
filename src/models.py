@@ -28,8 +28,8 @@ class Event:
         self.timestamp = timestamp or datetime.now()
 
     def __repr__(self):
-        return "<{0.__class__.__name__} ({0.alert_type}) for " \
-            "{0.monitor_name}: {0.alert_name} since {0.alert_duration}>".format(self)
+        return f"<{self.__class__.__name__} ({self.alert_type}) for " \
+            f"{self.monitor_name}: {self.alert_name} since {self.alert_duration}>"
 
     @classmethod
     def create_event(cls, data):
@@ -66,10 +66,7 @@ class Store:
         return event
 
     def __repr__(self):
-        return '<Store with {} events>'.format(len(self.store))
+        return f"<Store with {len(self.store)} events>"
 
     def __len__(self):
         return len(self.store)
-
-
-storage = Store()
