@@ -1,8 +1,7 @@
 import pytest
 from flask import url_for
 
-from hello import app, storage
-from settings import VERSION
+from hello import app, db
 
 from . import load_up, load_down
 
@@ -27,10 +26,10 @@ def test_urls():
 
 def test_storage(up, down):
     with app.test_client() as client:
-        assert len(storage) == 0
+        assert len(db) == 0
         client.post('/add', query_string=up)
         client.post('/add', query_string=down)
         client.post('/add', query_string=up)
-        assert len(storage) == 3
+        assert len(db) == 3
         client.get('/flush/2')
-        assert len(storage) == 2
+        assert len(db) == 2

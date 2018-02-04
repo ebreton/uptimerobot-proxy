@@ -18,3 +18,4 @@ coverage = "*"
 
 flask = "*"
 gunicorn = "*"
+flask-sqlalchemy = "*"
