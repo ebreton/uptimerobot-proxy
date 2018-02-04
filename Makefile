@@ -8,8 +8,8 @@ FLASK_DEBUG ?= 0
 vars:
 	@echo 'App-related vars:'
 	@echo '  APP_SECRET=${APP_SECRET}'
-	@echo '  DB_CLASS=${DB_CLASS}'
-	@echo '  DB_URI=${DB_URI}'
+	@echo '  STORAGE_TYPE=${STORAGE_TYPE}'
+	@echo '  DATABASE_URL=${DATABASE_URL}'
 	@echo ''
 	@echo 'Environment-related vars:'
 	@echo '  PYTHONPATH=${PYTHONPATH}'
@@ -21,6 +21,7 @@ vars:
 	@echo '  HEROKU_APP=${HEROKU_APP}'
 	@echo '  HEROKU_URL=${HEROKU_URL}'
 	@echo '  HEROKU_GIT=${HEROKU_GIT}'
+	@echo '  DB_URI_VAR_NAME=${DB_URI_VAR_NAME}'
 	@echo '  MAIL_USERNAME=${MAIL_USERNAME}'
 	@echo '  MAIL_PASSWORD=xxx'
 
@@ -39,7 +40,7 @@ init-heroku:
 	heroku config:set MAIL_USERNAME="${MAIL_USERNAME}"
 	@heroku config:set MAIL_PASSWORD="${MAIL_PASSWORD}" > /dev/null
 	heroku addons:add heroku-postgresql:hobby-dev
-	@echo replace DB_URI vars in your .env file
+	@echo replace DB_URI_VAR_NAME vars in your .env file
 	@echo run 'heroku pg:promote HEROKU_POSTGRESQL_***' to use the new DB as the primary one
 
 info:

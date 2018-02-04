@@ -1,19 +1,29 @@
 from flask import Flask, request, render_template, redirect, flash, url_for
 from utils import import_class_from_string
 
-from settings import VERSION, APP_SECRET, DB_CLASS, DB_URI
+from settings import VERSION, APP_SECRET, STORAGE_TYPE, DATABASE_URL
 
 app = Flask(__name__)
 
 # config app
 app.secret_key = APP_SECRET
-app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 
 
 def get_db(app):
-    db_class = import_class_from_string(DB_CLASS)
-    initialized = db_class.init_app(app)
-    return initialized if initialized is not None else db_class
+    """ DB are usually not really relevant for proxies...
+
+    However, one could like to know what is proxyed... The app therefore support
+    - a pure python storage of the events received, lightning fast
+    - or a more regular database through SQLAlchemy.
+
+    The choice is made at runtime through environment variable STORAGE_TYPE:
+    - in-memory storage with 'models.Store'
+    - or real DB with 'services.db'
+    """
+    db_type = import_class_from_string(STORAGE_TYPE)
+    initialized = db_type.init_app(app)
+    return initialized if initialized is not None else db_type
 
 
 # initialize DB
@@ -28,7 +38,7 @@ def index():
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     event = db.create(request.args)
-    return "Stored {}".format(event)
+    return f"Stored {event}"
 
 
 @app.route('/flush/<int:size>')
