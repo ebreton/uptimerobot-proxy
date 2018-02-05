@@ -7,8 +7,6 @@ app = Flask(__name__)
 
 # config app
 app.secret_key = APP_SECRET
-app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 def get_storage(app):
@@ -22,6 +20,8 @@ def get_storage(app):
     - in-memory storage with 'models.storage'
     - or real DB with 'services.storage'
     """
+    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db_type = import_class_from_string(STORAGE_TYPE)
     db_type.init_app(app)
     return db_type
