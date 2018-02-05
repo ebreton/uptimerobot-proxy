@@ -1,7 +1,7 @@
 import pytest
 from . import load_up, load_down
 
-from models import Event, Store
+from models import Event, storage
 
 
 @pytest.fixture
@@ -35,7 +35,7 @@ def test_create_down(down):
 
 
 def test_store(up, down):
-    storage = Store.init_app(None)
+    storage.init_app(None)
     assert repr(storage) == '<Store with 0 events>'
     storage.insert(Event.create_event(down))
     storage.create(up)

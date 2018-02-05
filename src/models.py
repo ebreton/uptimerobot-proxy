@@ -47,9 +47,8 @@ class Store:
     def __init__(self):
         self.store = deque()
 
-    @classmethod
-    def init_app(cls, app):
-        return cls()
+    def init_app(self, app):
+        pass
 
     def select(self):
         return self.store
@@ -70,3 +69,6 @@ class Store:
 
     def __len__(self):
         return len(self.store)
+
+
+storage = Store()

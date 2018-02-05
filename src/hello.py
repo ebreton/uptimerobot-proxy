@@ -8,9 +8,10 @@ app = Flask(__name__)
 # config app
 app.secret_key = APP_SECRET
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
-def get_db(app):
+def get_storage(app):
     """ DB are usually not really relevant for proxies...
 
     However, one could like to know what is proxyed... The app therefore support
@@ -18,33 +19,33 @@ def get_db(app):
     - or a more regular database through SQLAlchemy.
 
     The choice is made at runtime through environment variable STORAGE_TYPE:
-    - in-memory storage with 'models.Store'
-    - or real DB with 'services.db'
+    - in-memory storage with 'models.storage'
+    - or real DB with 'services.storage'
     """
     db_type = import_class_from_string(STORAGE_TYPE)
-    initialized = db_type.init_app(app)
-    return initialized if initialized is not None else db_type
+    db_type.init_app(app)
+    return db_type
 
 
 # initialize DB
-db = get_db(app)
+storage = get_storage(app)
 
 
 @app.route('/')
 def index():
-    return render_template("list.html", events=db.select())
+    return render_template("list.html", events=storage.select())
 
 
 @app.route('/add', methods=['GET', 'POST'])
 def add():
-    event = db.create(request.args)
+    event = storage.create(request.args)
     return f"Stored {event}"
 
 
 @app.route('/flush/<int:size>')
 def flush(size):
-    flash('flushed {} events'.format(max(0, len(db)-size)))
-    db.flush(size)
+    flash('flushed {} events'.format(max(0, len(storage)-size)))
+    storage.flush(size)
     return redirect(url_for('index'))
 
 
