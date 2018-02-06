@@ -37,6 +37,8 @@ endif
 init-heroku:
 	heroku create ${HEROKU_APP} || true
 	heroku config:set PYTHONPATH="./src"
+	heroku config:set APP_SECRET="7139952a-7cd0-43c8-98f5-b56a7806c272"
+	heroku config:set STORAGE_TYPE="services.storage"
 	heroku config:set MAIL_USERNAME="${MAIL_USERNAME}"
 	@heroku config:set MAIL_PASSWORD="${MAIL_PASSWORD}" > /dev/null
 	heroku addons:add heroku-postgresql:hobby-dev
@@ -65,8 +67,9 @@ ifeq (,$(wildcard ./src/gunicorn.db))
 endif
 	STORAGE_TYPE=services.storage DATABASE_URL=sqlite:///gunicorn.db gunicorn ${GUNICORN_APP}
 
-local: test
-	heroku local -p 7000
+heroku: test
+	STORAGE_TYPE=services.storage DATABASE_URL=postgres://127.0.0.1/$(whoami) python src/commands.py init-db
+	STORAGE_TYPE=services.storage DATABASE_URL=postgres://127.0.0.1/$(whoami) heroku local -p 7000
 
 deploy: test
 	git push heroku master
