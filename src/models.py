@@ -47,6 +47,9 @@ class Store:
     def __init__(self):
         self.store = deque()
 
+    def init_db(self):
+        pass
+
     def init_app(self, app):
         pass
 

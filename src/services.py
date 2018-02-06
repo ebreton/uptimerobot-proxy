@@ -41,11 +41,17 @@ class DBStore:
     def __init__(self):
         self.db = db
 
+    def init_db(self):
+        self.db.create_all()
+        DBEvent.query.delete()
+
     def init_app(self, app):
         self.db.init_app(app)
 
     def select(self):
-        return DBEvent.query.all()
+        events = DBEvent.query.all()
+        events.reverse()
+        return events
 
     def flush(self, size):
         count = len(self)

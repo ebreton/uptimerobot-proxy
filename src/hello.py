@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.secret_key = APP_SECRET
 
 
-def get_storage(app):
+def get_storage(app, storage_type=STORAGE_TYPE):
     """ DB are usually not really relevant for proxies...
 
     However, one could like to know what is proxyed... The app therefore support
@@ -22,7 +22,7 @@ def get_storage(app):
     """
     app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    db_type = import_class_from_string(STORAGE_TYPE)
+    db_type = import_class_from_string(storage_type)
     db_type.init_app(app)
     return db_type
 

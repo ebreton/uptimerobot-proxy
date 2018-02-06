@@ -60,7 +60,10 @@ run: test
 	flask run
 
 gunicorn: test
-	gunicorn ${GUNICORN_APP}
+ifeq (,$(wildcard ./src/gunicorn.db))
+	STORAGE_TYPE=services.storage DATABASE_URL=sqlite:///gunicorn.db python src/commands.py init-db
+endif
+	STORAGE_TYPE=services.storage DATABASE_URL=sqlite:///gunicorn.db gunicorn ${GUNICORN_APP}
 
 local: test
 	heroku local -p 7000

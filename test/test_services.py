@@ -1,14 +1,11 @@
 import pytest
 from . import load_up, load_down
 
-from hello import app
-from services import DBEvent, storage
+from hello import app, get_storage
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
-storage.init_app(app)
+storage = get_storage(app, storage_type="services.storage")
 app.app_context().push()
-storage.db.create_all()
-DBEvent.query.delete()
+storage.init_db()
 
 
 @pytest.fixture
@@ -50,5 +47,6 @@ def test_store(up, down):
     storage.flush(1)
     assert len(storage) == 1
     storage.flush(0)
+    storage.flush(2)
     assert len(storage) == 0
     assert list(storage.select()) == []
