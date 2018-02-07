@@ -12,6 +12,7 @@ pytest = "*"
 pytest-cov = "*"
 coverage = "*"
 "autopep8" = "*"
+requests-mock = "*"
 
 
 [packages]
@@ -22,3 +23,4 @@ flask-sqlalchemy = "*"
 docopt = "*"
 docopt-dispatch = "*"
 "psycopg2" = "*"
+requests = "*"

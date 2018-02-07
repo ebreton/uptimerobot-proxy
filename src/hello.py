@@ -43,7 +43,16 @@ def index():
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     event = storage.create(request.args)
-    return f"Stored {event}"
+    Proxy().forward(event)
+    return f"Stored & forwarded {event}"
+
+
+@app.route('/forward/<int:event_id>')
+def forward(event_id):
+    event = storage.get(event_id)
+    Proxy().forward(event)
+    flash(f'forwarded {event}')
+    return redirect(url_for('index'))
 
 
 @app.route('/flush/<int:size>')

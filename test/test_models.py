@@ -23,30 +23,46 @@ def test_format(up):
 
 
 def test_create_up(up):
-    event = storage.create(up)
-    assert event.alert_type == 2
-    assert event.alert_name == 'Up'
-    assert event.alert_duration == 99
-    assert event.monitor_name == 'unittest'
+    db_event = storage.create(up)
+    assert db_event.alert_type == 2
+    assert db_event.alert_name == 'Up'
+    assert db_event.alert_duration == 99
+    assert db_event.monitor_name == 'unittest'
     assert len(storage) == 1
 
 
 def test_create_down(down):
-    event = storage.create(down)
-    assert event.alert_type == 1
-    assert event.alert_name == 'Down'
-    assert event.alert_duration == 0
-    assert event.monitor_name == 'unittest'
+    db_event = storage.create(down)
+    assert db_event.alert_type == 1
+    assert db_event.alert_name == 'Down'
+    assert db_event.alert_duration == 0
+    assert db_event.monitor_name == 'unittest'
     assert len(storage) == 2
 
 
-def test_store(up, down):
+def test_store_create(up, down):
     storage.create(down)
     storage.create(up)
+    assert repr(storage) == '<DBStore with 4 events>'
     assert len(storage) == 4
+
+
+def test_store_flush():
     storage.flush(1)
     assert len(storage) == 1
     storage.flush(0)
     storage.flush(2)
     assert len(storage) == 0
+
+
+def test_store_select(down):
     assert list(storage.select()) == []
+    db_event = storage.create(down)
+    assert list(storage.select()) == [db_event]
+    storage.flush(0)
+
+
+def test_store_get(up):
+    db_event = storage.create(up)
+    assert storage.get(db_event.id) == db_event
+    storage.flush(0)

@@ -2,7 +2,7 @@
 {% block body %}
   <ul class="entries">
   {% for event in events %}
-    <li> {{ event }} <pre>{{ event|e2em }}</pre></li>
+    <li> {{ event }} <em><a href="{{ url_for('forward', event_id=event.id) }}">forward</a></em> <pre>{{ event|e2em }}</pre></li>
   {% endfor %}
   </ul>
 {% endblock %}

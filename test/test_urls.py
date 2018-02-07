@@ -1,7 +1,9 @@
 import pytest
+import requests_mock
 from flask import url_for
 
 from hello import app, storage
+from settings import E2EMONITORING_URL
 
 from . import load_up, load_down
 
@@ -25,7 +27,8 @@ def test_urls():
 
 
 def test_storage(up, down):
-    with app.test_client() as client:
+    with app.test_client() as client, requests_mock.Mocker() as mocker:
+        mocker.post(E2EMONITORING_URL, text='resp')
         assert len(storage) == 0
         client.post('/add', query_string=up)
         client.post('/add', query_string=down)

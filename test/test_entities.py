@@ -34,15 +34,34 @@ def test_create_down(down):
     assert event.monitor_name == 'unittest'
 
 
-def test_store(up, down):
+def test_storage_repr():
     storage.init_app(None)
     assert repr(storage) == '<Store with 0 events>'
-    storage.insert(Event.create_event(down))
+
+
+def test_store_create(up, down):
+    storage.create(Event.create_event(down))
     storage.create(up)
     assert repr(storage) == '<Store with 2 events>'
     assert len(storage) == 2
+
+
+def test_store_flush():
     storage.flush(1)
     assert len(storage) == 1
     storage.flush(0)
     assert len(storage) == 0
+
+
+def test_store_select(up):
     assert list(storage.select()) == []
+    event = Event.create_event(up)
+    storage.create(event)
+    assert list(storage.select()) == [event]
+    storage.flush(0)
+
+
+def test_store_get(up):
+    event = storage.create(up)
+    assert storage.get(0) == event
+    storage.flush(0)

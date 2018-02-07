@@ -48,24 +48,33 @@ class Store:
     def __init__(self):
         self.store = deque()
 
+    def _index(self):
+        # use index to emulate ids
+        for index, event in enumerate(self.store):
+            event.id = index
+
     def init_db(self):
         pass
 
     def init_app(self, app):
         pass
 
+    def get(self, event_id):
+        return self.store[event_id]
+
     def select(self):
+        self._index()
         return self.store
 
     def flush(self, size):
         self.store = deque(islice(self.store, 0, size))
+        self._index()
 
-    def insert(self, item):
-        self.store.appendleft(item)
-
-    def create(self, data):
-        event = Event.create_event(data)
-        self.insert(event)
+    def create(self, event):
+        if not isinstance(event, Event):
+            event = Event.create_event(event)
+        self.store.appendleft(event)
+        self._index()
         return event
 
     def __repr__(self):

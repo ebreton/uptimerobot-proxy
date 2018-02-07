@@ -1,12 +1,23 @@
 import json
+import requests
 
 from datetime import timedelta
 
 from settings import UPTIMEROBOT_DOWN, UPTIMEROBOT_UP, \
-    E2EMONITORING_DOWN, E2EMONITORING_UP, E2EMONITORING_SERVICE
+    E2EMONITORING_DOWN, E2EMONITORING_UP, E2EMONITORING_SERVICE, E2EMONITORING_URL
 
 
 class Proxy:
+
+    def __init__(self, url=E2EMONITORING_URL):
+        self.url = url
+
+    def forward(self, event):
+        requests.post(
+            self.url,
+            headers={"Content-Type": "application/json", "Accept": "application/json"},
+            data=self.event_to_json(event)
+        )
 
     def event_to_json(self, event):
         # prepare information when site goes DOWN

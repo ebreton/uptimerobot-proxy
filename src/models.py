@@ -53,6 +53,9 @@ class DBStore:
     def init_app(self, app):
         self.db.init_app(app)
 
+    def get(self, event_id):
+        return DBEvent.query.get(event_id)
+
     def select(self):
         events = DBEvent.query.all()
         events.reverse()
@@ -67,14 +70,13 @@ class DBStore:
             db.session.delete(event)
         db.session.commit()
 
-    def insert(self, event):
+    def create(self, event):
+        if not isinstance(event, Event):
+            event = Event.create_event(event)
         db_event = DBEvent.from_event(event)
         self.db.session.add(db_event)
         self.db.session.commit()
         return db_event
-
-    def create(self, data):
-        return self.insert(Event.create_event(data))
 
     def __repr__(self):
         return f"<DBStore with {len(self)} events>"
