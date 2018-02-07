@@ -2,7 +2,10 @@
 {% block body %}
   <ul class="entries">
   {% for event in events %}
-    <li> {{ event }} <em><a href="{{ url_for('forward', event_id=event.id) }}">forward</a></em> <pre>{{ event|e2em }}</pre></li>
+    <li> <h2>{{ event.monitor_name }} {{ event.alert_name }}</h2> {% if event.alert_type == 2 %}
+      <em>-> <a href="{{ url_for('forward', event_id=event.id) }}">forward</a></em> {% endif %}
+      <pre>{{ event|e2em }}</pre>
+    </li>
   {% endfor %}
   </ul>
 {% endblock %}

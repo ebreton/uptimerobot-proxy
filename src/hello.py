@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect, flash, url_for
 from utils import import_class_from_string
 
 from services import Proxy
-from settings import VERSION, APP_SECRET, STORAGE_TYPE, DATABASE_URL
+from settings import VERSION, APP_SECRET, STORAGE_TYPE, DATABASE_URL, UPTIMEROBOT_UP
 
 
 def create_app(storage_type=STORAGE_TYPE):
@@ -50,8 +50,11 @@ def add():
 @app.route('/forward/<int:event_id>')
 def forward(event_id):
     event = storage.get(event_id)
-    Proxy().forward(event)
-    flash(f'forwarded {event}')
+    if event.alert_type != UPTIMEROBOT_UP:
+        flash(f'only alerts Up can be forwarded, not {event.alert_name}')
+    else:
+        Proxy().forward(event)
+        flash(f'forwarded {event}')
     return redirect(url_for('index'))
 
 
