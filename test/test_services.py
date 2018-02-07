@@ -26,7 +26,7 @@ def test_create_up(up):
     event = storage.create(up)
     assert event.alert_type == 2
     assert event.alert_name == 'Up'
-    assert event.alert_duration == 0
+    assert event.alert_duration == 99
     assert event.monitor_name == 'unittest'
     assert len(storage) == 1
 
@@ -35,7 +35,7 @@ def test_create_down(down):
     event = storage.create(down)
     assert event.alert_type == 1
     assert event.alert_name == 'Down'
-    assert event.alert_duration == 5
+    assert event.alert_duration == 0
     assert event.monitor_name == 'unittest'
     assert len(storage) == 2
 

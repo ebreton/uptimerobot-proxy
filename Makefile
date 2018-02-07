@@ -9,6 +9,7 @@ vars:
 	@echo 'App-related vars:'
 	@echo '  APP_SECRET=${APP_SECRET}'
 	@echo '  E2EMONITORING_SERVICE=${E2EMONITORING_SERVICE}'
+	@echo '  E2EMONITORING_URL=${E2EMONITORING_URL}'
 	@echo '  STORAGE_TYPE=${STORAGE_TYPE}'
 	@echo '  DATABASE_URL=${DATABASE_URL}'
 	@echo ''
@@ -40,6 +41,7 @@ init-heroku:
 	heroku config:set PYTHONPATH="./src"
 	heroku config:set APP_SECRET="${APP_SECRET}"
 	heroku config:set E2EMONITORING_SERVICE="${E2EMONITORING_SERVICE}"
+	heroku config:set E2EMONITORING_URL="${E2EMONITORING_URL}"
 	heroku config:set STORAGE_TYPE="services.storage"
 	heroku config:set MAIL_USERNAME="${MAIL_USERNAME}"
 	@heroku config:set MAIL_PASSWORD="${MAIL_PASSWORD}" > /dev/null
@@ -51,7 +53,7 @@ init-heroku:
 info:
 	heroku apps
 	heroku addons
-	heroku pg:info
+	heroku config
 
 test: check-env
 	flake8 src --max-line-length=120

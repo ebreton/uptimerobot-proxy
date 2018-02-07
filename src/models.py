@@ -46,7 +46,7 @@ class Event:
         elif self.alert_type == UPTIMEROBOT_UP:
             priority = E2EMONITORING_UP
             description = f"{self.monitor_name} is {self.alert_name} ({self.alert_details}). " \
-                f"It was down for 4 minutes and 39 seconds."
+                f"It was down for {self.alert_duration}."
         # other alerts are not supported
         else:
             raise NotImplementedError(f"Alert not supported [{self.alert_type}: {self.alert_name}]")

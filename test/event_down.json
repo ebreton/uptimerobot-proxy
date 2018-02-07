@@ -5,6 +5,5 @@
     "alertType": 1,
     "alertTypeFriendlyName": "Down",
     "alertDetails": "for testing purpose",
-    "alertDuration": 5,
     "monitorAlertContacts": "457;2;john@doe.com - alertContactID;alertContactType, alertContactValue"
 }
