@@ -39,12 +39,13 @@ endif
 init-heroku:
 	heroku create ${HEROKU_APP} || true
 	heroku config:set PYTHONPATH="./src"
+	heroku config:set FLASK_DEBUG=0
 	heroku config:set APP_SECRET="${APP_SECRET}"
 	heroku config:set E2EMONITORING_SERVICE="${E2EMONITORING_SERVICE}"
 	heroku config:set E2EMONITORING_URL="${E2EMONITORING_URL}"
-	heroku config:set STORAGE_TYPE="models.storage"
 	heroku config:set MAIL_USERNAME="${MAIL_USERNAME}"
 	@heroku config:set MAIL_PASSWORD="${MAIL_PASSWORD}" > /dev/null
+	heroku config:set STORAGE_TYPE="models.storage"
 	heroku addons:add heroku-postgresql:hobby-dev
 	heroku run init
 	@echo replace DB_URI_VAR_NAME vars in your .env file
