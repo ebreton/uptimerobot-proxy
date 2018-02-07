@@ -1,12 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
 
 from entities import Event
 
 db = SQLAlchemy()
 
 
-class DBEvent(db.Model):
+class DBEvent(db.Model, Event):
 
     id = db.Column(db.Integer, primary_key=True)
     monitor_name = db.Column(db.String(80))
@@ -17,12 +16,18 @@ class DBEvent(db.Model):
     timestamp = db.Column(db.DateTime)
 
     def __init__(self, monitor_name, alert_type, alert_name, alert_details, alert_duration, timestamp=None):
-        self.monitor_name = monitor_name
-        self.alert_type = alert_type
-        self.alert_name = alert_name
-        self.alert_details = alert_details
-        self.alert_duration = alert_duration
-        self.timestamp = timestamp or datetime.now()
+        Event.__init__(
+            self,
+            monitor_name,
+            alert_type,
+            alert_name,
+            alert_details,
+            alert_duration,
+            timestamp=timestamp
+        )
+
+    def __repr__(self):
+        return Event.__repr__(self)
 
     @classmethod
     def from_event(cls, event):
@@ -31,7 +36,7 @@ class DBEvent(db.Model):
             event.alert_type,
             event.alert_name,
             event.alert_details,
-            event.alert_duration.seconds,
+            event.alert_duration,
             timestamp=event.timestamp
         )
 

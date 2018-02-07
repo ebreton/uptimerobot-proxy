@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, redirect, flash, url_for
 from utils import import_class_from_string
 
+from services import Proxy
 from settings import VERSION, APP_SECRET, STORAGE_TYPE, DATABASE_URL
 
 
@@ -27,6 +28,11 @@ def create_app(storage_type=STORAGE_TYPE):
 
 
 app, storage = create_app()
+
+
+@app.template_filter('e2em')
+def to_json(event):
+    return Proxy().event_to_json(event)
 
 
 @app.route('/')
