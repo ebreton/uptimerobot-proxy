@@ -3,7 +3,7 @@ import uuid
 
 from utils import get_optional_env, get_mandatory_env
 
-VERSION = "0.3.2"
+VERSION = "0.3.3"
 APP_SECRET = get_optional_env("APP_SECRET", str(uuid.uuid4()))
 
 STORAGE_TYPE = get_optional_env("STORAGE_TYPE", "entities.storage")
