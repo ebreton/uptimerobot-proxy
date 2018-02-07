@@ -34,7 +34,7 @@ ifeq ($(wildcard .env),)
 endif
 	pipenv --update 
 	pipenv update --dev --python 3
-	@echo replace HEROKU_APP & MAIL_* vars in your .env file before launching make init-heroku
+	@echo "replace HEROKU_APP & MAIL_* vars in your .env file before launching make init-heroku"
 
 init-heroku:
 	heroku create ${HEROKU_APP} || true
