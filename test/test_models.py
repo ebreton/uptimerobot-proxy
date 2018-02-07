@@ -15,14 +15,14 @@ def down():
 
 
 def test_format(up):
-    assert repr(Event.create_event(up)) == "<Event (2) for unittest: Up since 99>"
+    assert repr(Event.create_event(up)) == "<Event (2) for unittest: Up since 0:00:00>"
 
 
 def test_create_up(up):
     event = Event.create_event(up)
     assert event.alert_type == 2
     assert event.alert_name == 'Up'
-    assert event.alert_duration == 99
+    assert event.alert_duration.seconds == 0
     assert event.monitor_name == 'unittest'
 
 
@@ -30,7 +30,7 @@ def test_create_down(down):
     event = Event.create_event(down)
     assert event.alert_type == 1
     assert event.alert_name == 'Down'
-    assert event.alert_duration == 5
+    assert event.alert_duration.seconds == 5
     assert event.monitor_name == 'unittest'
 
 

@@ -31,7 +31,7 @@ class DBEvent(db.Model):
             event.alert_type,
             event.alert_name,
             event.alert_details,
-            event.alert_duration,
+            event.alert_duration.seconds,
             timestamp=event.timestamp
         )
 
@@ -63,13 +63,13 @@ class DBStore:
         db.session.commit()
 
     def insert(self, event):
-        self.db.session.add(DBEvent.from_event(event))
+        db_event = DBEvent.from_event(event)
+        self.db.session.add(db_event)
         self.db.session.commit()
+        return db_event
 
     def create(self, data):
-        event = Event.create_event(data)
-        self.insert(event)
-        return event
+        return self.insert(Event.create_event(data))
 
     def __repr__(self):
         return f"<DBStore with {len(self)} events>"

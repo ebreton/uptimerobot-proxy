@@ -12,7 +12,7 @@
       - sslExpiryDate: only for SSL expiry notifications
       - sslExpiryDaysLeft: only for SSL expiry notifications
 """
-from datetime import datetime
+from datetime import datetime, timedelta
 from collections import deque
 from itertools import islice
 
@@ -24,12 +24,13 @@ class Event:
         self.alert_type = alert_type
         self.alert_name = alert_name
         self.alert_details = alert_details
-        self.alert_duration = alert_duration
+        seconds = alert_duration and int(alert_duration) or 0
+        self.alert_duration = timedelta(seconds=seconds)
         self.timestamp = timestamp or datetime.now()
 
     def __repr__(self):
         return f"<{self.__class__.__name__} ({self.alert_type}) for " \
-            f"{self.monitor_name}: {self.alert_name} since {self.alert_duration}>"
+            f"{self.monitor_name}: {self.alert_name} since {str(self.alert_duration)}>"
 
     @classmethod
     def create_event(cls, data):
