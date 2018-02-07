@@ -13,6 +13,7 @@ pytest-cov = "*"
 coverage = "*"
 "autopep8" = "*"
 requests-mock = "*"
+codecov = "*"
 
 
 [packages]
