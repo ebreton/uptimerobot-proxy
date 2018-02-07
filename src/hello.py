@@ -35,6 +35,14 @@ def to_json(event):
     return Proxy().event_to_json(event)
 
 
+@app.template_filter('timeago')
+def timeago(timestamp, timeago=True):
+    readable = timestamp.strftime('%Y-%m-%d @%H:%M')
+    if not timeago:
+        return readable
+    return f'<time class=timeago datetime="{str(timestamp)}">{readable}</time>'
+
+
 @app.route('/')
 def index():
     return render_template("list.html", events=storage.select())
