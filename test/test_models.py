@@ -1,7 +1,9 @@
 import pytest
+import json
 from . import load_up, load_down
 
 from models import Event, storage
+from settings import E2EMONITORING_SERVICE, E2EMONITORING_DOWN, E2EMONITORING_UP
 
 
 @pytest.fixture
@@ -46,3 +48,21 @@ def test_store(up, down):
     storage.flush(0)
     assert len(storage) == 0
     assert list(storage.select()) == []
+
+
+def test_to_json_up(up):
+    assert json.loads(Event.create_event(up).to_json()) == {
+        "u_business_service": E2EMONITORING_SERVICE,
+        "u_priority": E2EMONITORING_UP,
+        "u_short_description": "unittest is Up",
+        "u_description": "unittest is Up (for testing purpose). It was down for 4 minutes and 39 seconds.",
+    }
+
+
+def test_to_json_down(down):
+    assert json.loads(Event.create_event(down).to_json()) == {
+        "u_business_service": E2EMONITORING_SERVICE,
+        "u_priority": E2EMONITORING_DOWN,
+        "u_short_description": "unittest is Down",
+        "u_description": "unittest is Down: for testing purpose.",
+    }

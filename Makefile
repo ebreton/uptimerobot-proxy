@@ -8,6 +8,7 @@ FLASK_DEBUG ?= 0
 vars:
 	@echo 'App-related vars:'
 	@echo '  APP_SECRET=${APP_SECRET}'
+	@echo '  E2EMONITORING_SERVICE=${E2EMONITORING_SERVICE}'
 	@echo '  STORAGE_TYPE=${STORAGE_TYPE}'
 	@echo '  DATABASE_URL=${DATABASE_URL}'
 	@echo ''
@@ -37,7 +38,8 @@ endif
 init-heroku:
 	heroku create ${HEROKU_APP} || true
 	heroku config:set PYTHONPATH="./src"
-	heroku config:set APP_SECRET="7139952a-7cd0-43c8-98f5-b56a7806c272"
+	heroku config:set APP_SECRET="${APP_SECRET}"
+	heroku config:set E2EMONITORING_SERVICE="${E2EMONITORING_SERVICE}"
 	heroku config:set STORAGE_TYPE="services.storage"
 	heroku config:set MAIL_USERNAME="${MAIL_USERNAME}"
 	@heroku config:set MAIL_PASSWORD="${MAIL_PASSWORD}" > /dev/null

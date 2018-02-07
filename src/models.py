@@ -12,9 +12,14 @@
       - sslExpiryDate: only for SSL expiry notifications
       - sslExpiryDaysLeft: only for SSL expiry notifications
 """
+import json
+
 from datetime import datetime, timedelta
 from collections import deque
 from itertools import islice
+
+from settings import UPTIMEROBOT_DOWN, UPTIMEROBOT_UP, \
+    E2EMONITORING_DOWN, E2EMONITORING_UP, E2EMONITORING_SERVICE
 
 
 class Event:
@@ -31,6 +36,27 @@ class Event:
     def __repr__(self):
         return f"<{self.__class__.__name__} ({self.alert_type}) for " \
             f"{self.monitor_name}: {self.alert_name} since {str(self.alert_duration)}>"
+
+    def to_json(self):
+        # prepare information when site goes DOWN
+        if self.alert_type == UPTIMEROBOT_DOWN:
+            priority = E2EMONITORING_DOWN
+            description = f"{self.monitor_name} is {self.alert_name}: {self.alert_details}."
+        # prepare information when back UP
+        elif self.alert_type == UPTIMEROBOT_UP:
+            priority = E2EMONITORING_UP
+            description = f"{self.monitor_name} is {self.alert_name} ({self.alert_details}). " \
+                f"It was down for 4 minutes and 39 seconds."
+        # other alerts are not supported
+        else:
+            raise NotImplementedError(f"Alert not supported [{self.alert_type}: {self.alert_name}]")
+        # return a JSON compliant to E2E monitoring expectations
+        return json.dumps({
+            "u_business_service": E2EMONITORING_SERVICE,
+            "u_priority": priority,
+            "u_short_description": f"{self.monitor_name} is {self.alert_name}",
+            "u_description": description,
+        })
 
     @classmethod
     def create_event(cls, data):
