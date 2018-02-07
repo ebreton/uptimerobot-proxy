@@ -3,13 +3,8 @@ from utils import import_class_from_string
 
 from settings import VERSION, APP_SECRET, STORAGE_TYPE, DATABASE_URL
 
-app = Flask(__name__)
 
-# config app
-app.secret_key = APP_SECRET
-
-
-def get_storage(app, storage_type=STORAGE_TYPE):
+def create_app(storage_type=STORAGE_TYPE):
     """ DB are usually not really relevant for proxies...
 
     However, one could like to know what is proxyed... The app therefore support
@@ -20,15 +15,18 @@ def get_storage(app, storage_type=STORAGE_TYPE):
     - in-memory storage with 'models.storage'
     - or real DB with 'services.storage'
     """
+    app = Flask(__name__)
+    # config app
+    app.secret_key = APP_SECRET
+    # config storage
     app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db_type = import_class_from_string(storage_type)
     db_type.init_app(app)
-    return db_type
+    return app, db_type
 
 
-# initialize DB
-storage = get_storage(app)
+app, storage = create_app()
 
 
 @app.route('/')

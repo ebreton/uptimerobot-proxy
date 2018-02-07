@@ -17,13 +17,13 @@ from docopt import docopt
 from docopt_dispatch import dispatch
 
 from utils import set_logging_config
-from hello import app, get_storage
+from hello import create_app
 from settings import VERSION
 
 
 @dispatch.on('init-db')
 def init_db(name=None, **kwargs):
-    storage = get_storage(app, storage_type="services.storage")
+    app, storage = create_app(storage_type="services.storage")
     app.app_context().push()
     storage.init_db()
 

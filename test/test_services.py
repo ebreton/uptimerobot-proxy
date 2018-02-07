@@ -1,9 +1,9 @@
 import pytest
 from . import load_up, load_down
 
-from hello import app, get_storage
+from hello import create_app
 
-storage = get_storage(app, storage_type="services.storage")
+app, storage = create_app(storage_type="services.storage")
 app.app_context().push()
 storage.init_db()
 
@@ -26,7 +26,7 @@ def test_create_up(up):
     event = storage.create(up)
     assert event.alert_type == 2
     assert event.alert_name == 'Up'
-    assert event.alert_duration == 99
+    assert event.alert_duration == 0
     assert event.monitor_name == 'unittest'
     assert len(storage) == 1
 
