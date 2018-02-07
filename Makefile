@@ -42,6 +42,7 @@ init-heroku:
 	heroku config:set MAIL_USERNAME="${MAIL_USERNAME}"
 	@heroku config:set MAIL_PASSWORD="${MAIL_PASSWORD}" > /dev/null
 	heroku addons:add heroku-postgresql:hobby-dev
+	heroku run init
 	@echo replace DB_URI_VAR_NAME vars in your .env file
 	@echo run 'heroku pg:promote HEROKU_POSTGRESQL_***' to use the new DB as the primary one
 
