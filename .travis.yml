@@ -14,5 +14,6 @@ install:
 - make init-venv
 
 script:
+- pipenv shell
 - make test
 - codecov
