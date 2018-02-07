@@ -1,104 +1,81 @@
-"""
-    Wraps data sent from uptimerobot into python objects. Following vars can be passed:
-      - monitorID: the ID of the monitor
-      - monitorURL: the URL of the monitor
-      - monitorFriendlyName: the friendly name of the monitor
-      - alertType: 1: down, 2: up, 3: SSL expiry notification
-      - alertTypeFriendlyName: Down or Up
-      - alertDetails: any info regarding the alert -if exists-
-      - alertDuration: in seconds and only for up events
-      - monitorAlertContacts: the alert contacts associated with the alert in the format of
-            457;2;john@doe.com - alertContactID;alertContactType, alertContactValue
-      - sslExpiryDate: only for SSL expiry notifications
-      - sslExpiryDaysLeft: only for SSL expiry notifications
-"""
-import json
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
-from datetime import datetime, timedelta
-from collections import deque
-from itertools import islice
+from entities import Event
 
-from settings import UPTIMEROBOT_DOWN, UPTIMEROBOT_UP, \
-    E2EMONITORING_DOWN, E2EMONITORING_UP, E2EMONITORING_SERVICE
+db = SQLAlchemy()
 
 
-class Event:
+class DBEvent(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    monitor_name = db.Column(db.String(80))
+    alert_type = db.Column(db.Integer)
+    alert_name = db.Column(db.String(10))
+    alert_details = db.Column(db.String(256))
+    alert_duration = db.Column(db.Integer)
+    timestamp = db.Column(db.DateTime)
 
     def __init__(self, monitor_name, alert_type, alert_name, alert_details, alert_duration, timestamp=None):
         self.monitor_name = monitor_name
         self.alert_type = alert_type
         self.alert_name = alert_name
         self.alert_details = alert_details
-        seconds = alert_duration and int(alert_duration) or 0
-        self.alert_duration = timedelta(seconds=seconds)
+        self.alert_duration = alert_duration
         self.timestamp = timestamp or datetime.now()
 
-    def __repr__(self):
-        return f"<{self.__class__.__name__} ({self.alert_type}) for " \
-            f"{self.monitor_name}: {self.alert_name} since {str(self.alert_duration)}>"
-
-    def to_json(self):
-        # prepare information when site goes DOWN
-        if self.alert_type == UPTIMEROBOT_DOWN:
-            priority = E2EMONITORING_DOWN
-            description = f"{self.monitor_name} is {self.alert_name}: {self.alert_details}."
-        # prepare information when back UP
-        elif self.alert_type == UPTIMEROBOT_UP:
-            priority = E2EMONITORING_UP
-            description = f"{self.monitor_name} is {self.alert_name} ({self.alert_details}). " \
-                f"It was down for {self.alert_duration}."
-        # other alerts are not supported
-        else:
-            raise NotImplementedError(f"Alert not supported [{self.alert_type}: {self.alert_name}]")
-        # return a JSON compliant to E2E monitoring expectations
-        return json.dumps({
-            "u_business_service": E2EMONITORING_SERVICE,
-            "u_priority": priority,
-            "u_short_description": f"{self.monitor_name} is {self.alert_name}",
-            "u_description": description,
-        })
-
     @classmethod
-    def create_event(cls, data):
+    def from_event(cls, event):
         return cls(
-            data.get('monitorFriendlyName'),
-            data.get('alertType'),
-            data.get('alertTypeFriendlyName'),
-            data.get('alertDetails'),
-            data.get('alertDuration'),
+            event.monitor_name,
+            event.alert_type,
+            event.alert_name,
+            event.alert_details,
+            event.alert_duration.seconds,
+            timestamp=event.timestamp
         )
 
 
-class Store:
+class DBStore:
 
     def __init__(self):
-        self.store = deque()
+        self.db = db
 
     def init_db(self):
-        pass
+        self.db.create_all()
+        DBEvent.query.delete()
 
     def init_app(self, app):
-        pass
+        self.db.init_app(app)
 
     def select(self):
-        return self.store
+        events = DBEvent.query.all()
+        events.reverse()
+        return events
 
     def flush(self, size):
-        self.store = deque(islice(self.store, 0, size))
+        count = len(self)
+        if count <= size:
+            return
+        # FIXME make a bulk delete here
+        for event in DBEvent.query.limit(len(self)-size).all():
+            db.session.delete(event)
+        db.session.commit()
 
-    def insert(self, item):
-        self.store.appendleft(item)
+    def insert(self, event):
+        db_event = DBEvent.from_event(event)
+        self.db.session.add(db_event)
+        self.db.session.commit()
+        return db_event
 
     def create(self, data):
-        event = Event.create_event(data)
-        self.insert(event)
-        return event
+        return self.insert(Event.create_event(data))
 
     def __repr__(self):
-        return f"<Store with {len(self.store)} events>"
+        return f"<DBStore with {len(self)} events>"
 
     def __len__(self):
-        return len(self.store)
+        return DBEvent.query.count()
 
 
-storage = Store()
+storage = DBStore()

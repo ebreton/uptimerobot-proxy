@@ -23,7 +23,7 @@ from settings import VERSION
 
 @dispatch.on('init-db')
 def init_db(name=None, **kwargs):
-    app, storage = create_app(storage_type="services.storage")
+    app, storage = create_app(storage_type="models.storage")
     app.app_context().push()
     storage.init_db()
 

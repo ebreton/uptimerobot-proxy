@@ -42,7 +42,7 @@ init-heroku:
 	heroku config:set APP_SECRET="${APP_SECRET}"
 	heroku config:set E2EMONITORING_SERVICE="${E2EMONITORING_SERVICE}"
 	heroku config:set E2EMONITORING_URL="${E2EMONITORING_URL}"
-	heroku config:set STORAGE_TYPE="services.storage"
+	heroku config:set STORAGE_TYPE="models.storage"
 	heroku config:set MAIL_USERNAME="${MAIL_USERNAME}"
 	@heroku config:set MAIL_PASSWORD="${MAIL_PASSWORD}" > /dev/null
 	heroku addons:add heroku-postgresql:hobby-dev
@@ -68,13 +68,13 @@ run: test
 
 gunicorn: test
 ifeq (,$(wildcard ./src/gunicorn.db))
-	STORAGE_TYPE=services.storage DATABASE_URL=sqlite:///gunicorn.db python src/commands.py init-db
+	STORAGE_TYPE=models.storage DATABASE_URL=sqlite:///gunicorn.db python src/commands.py init-db
 endif
-	STORAGE_TYPE=services.storage DATABASE_URL=sqlite:///gunicorn.db gunicorn ${GUNICORN_APP}
+	STORAGE_TYPE=models.storage DATABASE_URL=sqlite:///gunicorn.db gunicorn ${GUNICORN_APP}
 
 heroku: test
-	STORAGE_TYPE=services.storage DATABASE_URL=postgres://127.0.0.1/$(whoami) python src/commands.py init-db
-	STORAGE_TYPE=services.storage DATABASE_URL=postgres://127.0.0.1/$(whoami) heroku local -p 7000
+	STORAGE_TYPE=models.storage DATABASE_URL=postgres://127.0.0.1/$(whoami) python src/commands.py init-db
+	STORAGE_TYPE=models.storage DATABASE_URL=postgres://127.0.0.1/$(whoami) heroku local -p 7000
 
 deploy: test
 	git push heroku master

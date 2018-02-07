@@ -12,8 +12,8 @@ def create_app(storage_type=STORAGE_TYPE):
     - or a more regular database through SQLAlchemy.
 
     The choice is made at runtime through environment variable STORAGE_TYPE:
-    - in-memory storage with 'models.storage'
-    - or real DB with 'services.storage'
+    - in-memory storage with 'entities.storage'
+    - or real DB with 'models.storage'
     """
     app = Flask(__name__)
     # config app
