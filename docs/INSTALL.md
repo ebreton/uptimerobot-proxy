@@ -99,8 +99,9 @@ You most critival variables are
 
 ### `make vars`
 
-Once you have set up your `.env` file, you may control what values will be used with
+Once you have set up your `.env` file, you may activate your virtual environment, and control what values will be used with
 
+    $ pipenv shell
     $ make vars
     App-related vars:
         APP_SECRET=
@@ -126,6 +127,8 @@ Once you have set up your `.env` file, you may control what values will be used 
 ### `make init-heroku`
 
 ### `HEROKU_APP`
+
+- `HEROKU_APP`: the application name, returned by Heroku when you ran `make init-venv`
 
 ## Your dev environment
 
