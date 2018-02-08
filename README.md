@@ -45,7 +45,7 @@ UptimeRobot | Uptime Proxy | E2E Monitoring
 - **Support for DB (but not mandatory)** if persistent storage is needed: will use postgreSQL with Heroku by default. Also works without DB, in which case the events will be stored in memory, until next restart of the application
 - **Configuration through environement variables** in a `.env` file: mainly for Heroku, storage type, E2E Monitoring. One given `.env` will setup a proxy instance for one given service
 - **Dev friendly**: A Makefile will allow to quickly setup the dev environment. The application can be run locally with hot reloading of the code, or without. With DB or without. Emulating Heroku context or not. `make deploy` will push the app online.
-- **Automated** testing and deployment: connected to Travis and Codecov, relies on [Heroku](https://www.heroku.com) toolbelt for deployment.
+- **Automated** testing and deployment: connected to Travis and Codecov, relies on Heroku toolbelt for deployment.
 
 ### Something is missing ?
 

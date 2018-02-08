@@ -23,7 +23,17 @@ Table of contents
 1. Sign up at [UptimeRobot.com](https://uptimerobot.com) (it is free up to 50 monitors), and create a monitor for the website you wish to monitor
 1. Sign up at [Heroku](https://www.heroku.com) and install [Heroku toolbelt](https://devcenter.heroku.com/articles/heroku-cli)
 1. Look for your EPFL [service ID](https://it.epfl.ch/help/?id=epfl_services_status)
-1. Install [pipenv](http://pipenv.readthedocs.io/en/latest/) locally, [GNU make](https://www.gnu.org/software/make/), and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) if you do not have them already.
+1. Install [GNU make](https://www.gnu.org/software/make/), [Heroku Toolbelt](https://devcenter.heroku.com/articles/heroku-cli),  [pipenv](http://pipenv.readthedocs.io/en/latest/) locally and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) if you do not have them already
+
+        $ make --version
+        GNU Make 3.81
+        ...
+        $ heroku --version
+        heroku-cli/6.15.22-3f1c4bd (darwin-x64) node-v9.5.0
+        $ pipenv --version
+        pipenv, version 9.0.3
+        $ git --version
+        git version 2.12.2
 
 ### Main steps
 
@@ -35,21 +45,13 @@ Table of contents
 
 ## Starting point: github
 
-Before anything else, just make sure you have the pre-requisites installed:
 
-    $ make --version
-    GNU Make 3.81
-    ...
-    $ heroku --version
-    heroku-cli/6.15.22-3f1c4bd (darwin-x64) node-v9.5.0
-    $ pipenv --version
-    pipenv, version 9.0.3
-    $ git --version
-    git version 2.12.2
+You may download, clone or fork the project.
 
-You may download, clone or fork the project. The following line clone it, and change your current working directory into it:
+The following line clone it, and change your current working directory into it:
 
     $ git clone git@github.com:ebreton/uptimerobot-proxy.git
+    ...
     $ cd uptimerobot-proxy
 
 ## Initial setup
