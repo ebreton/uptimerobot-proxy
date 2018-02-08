@@ -13,7 +13,7 @@ vars:
 	@echo '  STORAGE_TYPE=${STORAGE_TYPE}'
 	@echo '  DATABASE_URL=${DATABASE_URL}'
 	@echo ''
-	@echo 'Environment-related vars:'
+	@echo 'Dev-related vars:'
 	@echo '  PYTHONPATH=${PYTHONPATH}'
 	@echo '  FLASK_APP=${FLASK_APP}'
 	@echo '  FLASK_DEBUG=${FLASK_DEBUG}'
