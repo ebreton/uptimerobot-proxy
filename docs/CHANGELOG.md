@@ -21,13 +21,13 @@ Table of releases
 ## [0.3.x] - 2018-02-07
 
 1. Added Documentation
-1. Enabled forwarding to given url E2EMONITORING_URL 
+1. Enabled forwarding to given url E2EMONITORING_URL for given service E2EMONITORING_SERVICE
 1. Displayed JSON export in GUI, along with time since alert received
 1. Added JSON export of events in format expected by E2EMonitoring
 
 ## [0.2.x] - 2018-02-06
 
-1. Enable database storage with E2EMONITORING_URL 
+1. Enable database storage with STORAGE_TYPE and DATABASE_URL
 1. Added support for sqlite3 & postgreSQL (through SQLAlchemy)
 1. Displayed JSON export in GUI, along with time since alert received
 
