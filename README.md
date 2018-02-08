@@ -49,7 +49,7 @@ UptimeRobot | Uptime Proxy | E2E Monitoring
 
 ### Something is missing ?
 
-Head to githup and submit an issue ! Be sure to have a look at the [CONTRIBUTING.md](./docs/CONTRIBUTING.md) guide before
+Head to [githup issues](https://github.com/ebreton/uptimerobot-proxy/issues) and submit one ! Be sure to have a look at the [CONTRIBUTING.md](./docs/CONTRIBUTING.md) guide before
 
 ## Install and Usage
 

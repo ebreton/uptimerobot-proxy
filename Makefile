@@ -24,8 +24,8 @@ vars:
 	@echo '  HEROKU_URL=${HEROKU_URL}'
 	@echo '  HEROKU_GIT=${HEROKU_GIT}'
 	@echo '  DB_URI_VAR_NAME=${DB_URI_VAR_NAME}'
-	@echo '  MAIL_USERNAME=${MAIL_USERNAME}'
-	@echo '  MAIL_PASSWORD=xxx'
+	@echo '  HEROKU_USERNAME=${HEROKU_USERNAME}'
+	@echo '  HEROKU_PASSWORD=xxx'
 
 init-venv:
 ifeq ($(wildcard .env),)
@@ -43,8 +43,8 @@ init-heroku:
 	heroku config:set APP_SECRET="${APP_SECRET}"
 	heroku config:set E2EMONITORING_SERVICE="${E2EMONITORING_SERVICE}"
 	heroku config:set E2EMONITORING_URL="${E2EMONITORING_URL}"
-	heroku config:set MAIL_USERNAME="${MAIL_USERNAME}"
-	@heroku config:set MAIL_PASSWORD="${MAIL_PASSWORD}" > /dev/null
+	heroku config:set MAIL_USERNAME="${HEROKU_USERNAME}"
+	@heroku config:set MAIL_PASSWORD="${HEROKU_PASSWORD}" > /dev/null
 	heroku config:set STORAGE_TYPE="models.storage"
 	heroku addons:add heroku-postgresql:hobby-dev
 	heroku run init
