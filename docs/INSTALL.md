@@ -16,6 +16,7 @@ Table of contents
     - [`make vars`](#make-vars)
     - [`make init-heroku`](#make-init-heroku)
     - [`HEROKU_APP`](#heroku_app)
+- [Uptime Robot setup](#uptime-robot-setup)
 - [Your dev environment](#your-dev-environment)
     - [`pipenv shell`](#pipenv-shell)
     - [`make run`](#make-run)
@@ -177,6 +178,18 @@ You are now set for your first deployment, and the initialization of your DB
 You are are set!
 
 You can access your instance on https://cove-radio-43534.herokuapp.com/
+
+## Uptime Robot setup
+
+The last piece of the puzzle is the configuration of Uptimerobot with a new contact making use of the fresh Uptime Proxy endpoint (e.g. https://cove-radio-43534.herokuapp.com/add?)
+
+You will need
+
+1. to create a monitor which monitors your-site.com
+1. to create a web-hook contact that makes use of your instance of uptime proxy (e.g https://cove-radio-43534.herokuapp.com/add?)
+1. edit your monitor to make use of your contact
+
+Refer to [UptimeRobot.com](https://uptimerobot.com) for more details on those procedure, especially this blog on [web hooks](https://blog.uptimerobot.com/web-hook-alert-contacts-new-feature/)
 
 ## Your dev environment
 
