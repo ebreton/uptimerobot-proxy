@@ -76,7 +76,7 @@ The following line clone it, and change your current working directory into it:
     Creating a virtualenv for this project…
     ...
     All dependencies are now up-to-date!
-    replace HEROKU_APP & MAIL_* vars in your .env file before launching make init-heroku
+    -> Set up your .env file before launching make init-heroku
 
 ### `vi .env`
 
@@ -92,6 +92,7 @@ The [`.env.sample` file](https://github.com/ebreton/uptimerobot-proxy/blob/maste
 
 You most critival variables are
 
+- `APP_SECRET`, which is whatever string you want, and will be used as seed by the application to manage sessions
 - `HEROKU_USERNAME` & `HEROKU_PASSWORD`: credentials to use for [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 - `E2EMONITORING_SERVICE`: the identifier of the service monitored
 - `E2EMONITORING_URL`: the URL where to forward the alerts to
@@ -107,7 +108,7 @@ Once you have set up your `.env` file, you may activate your virtual environment
     $ pipenv shell
     $ make vars
     App-related vars:
-        APP_SECRET=
+        APP_SECRET=whatever you like
         E2EMONITORING_SERVICE=SVC0xxx
         E2EMONITORING_URL=https://user:password@it-test.epfl.ch/api/..
         STORAGE_TYPE=models.storage
@@ -141,8 +142,8 @@ Your environment is now set up to use the Heroku toolbelt, thanks to heroku cred
     ...
     Created postgresql-vertical-3453 as DATABASE_URL
     ...
-    replace HEROKU_APP vars in your .env file
-    run 'heroku run init' when done
+    -> Replace HEROKU_APP vars in your .env file
+    -> Run 'heroku run init' when done
 
 ### `HEROKU_APP`
 
@@ -160,6 +161,10 @@ You are now set for your first deployment, and the initialization of your DB
     git push heroku master
     Counting objects: 335, done.
     ...
+    remote: -----> Launching...
+    remote:        Released v12
+    remote:        https://cove-radio-43534.herokuapp.com/ deployed to Heroku
+    remote:
     remote: Verifying deploy... done.
     To https://git.heroku.com/cove-radio-43534.git
      * [new branch]      master -> master

@@ -34,7 +34,7 @@ ifeq ($(wildcard .env),)
 endif
 	pipenv --update 
 	pipenv update --dev --python 3
-	@echo "replace HEROKU_APP & MAIL_* vars in your .env file before launching make init-heroku"
+	@echo "-> Set up your .env file before launching make init-heroku"
 
 init-heroku:
 	heroku create ${HEROKU_APP} || true
@@ -47,8 +47,8 @@ init-heroku:
 	@heroku config:set MAIL_PASSWORD="${HEROKU_PASSWORD}" > /dev/null
 	heroku config:set STORAGE_TYPE="models.storage"
 	heroku addons:add heroku-postgresql:hobby-dev
-	@echo replace HEROKU_APP vars in your .env file
-	@echo run 'heroku run init' when done
+	@echo "-> Replace HEROKU_APP vars in your .env file"
+	@echo "-> Run 'heroku run init' when done"
 
 info:
 	heroku apps
