@@ -22,7 +22,6 @@ Table of contents
     - [`make gunicorn`](#make-gunicorn)
     - [`make heroku`](#make-heroku)
 - [Deploying to Heroku](#deploying-to-heroku)
-    - [`make deploy`](#make-deploy)
 
 <!-- /TOC -->
 
@@ -97,6 +96,10 @@ You most critival variables are
 - `E2EMONITORING_SERVICE`: the identifier of the service monitored
 - `E2EMONITORING_URL`: the URL where to forward the alerts to
 
+If you wish to persit data, also set
+
+- `STORAGE_TYPE` to 'models.storage'
+
 ### `make vars`
 
 Once you have set up your `.env` file, you may activate your virtual environment, and control what values will be used with
@@ -105,10 +108,10 @@ Once you have set up your `.env` file, you may activate your virtual environment
     $ make vars
     App-related vars:
         APP_SECRET=
-        E2EMONITORING_SERVICE=<service id>
-        E2EMONITORING_URL=https://e2e-monitoring.com/your-url
-        STORAGE_TYPE=
-        DATABASE_URL=
+        E2EMONITORING_SERVICE=SVC0xxx
+        E2EMONITORING_URL=https://user:password@it-test.epfl.ch/api/..
+        STORAGE_TYPE=models.storage
+        DATABASE_URL=sqlite:////tmp/test.db
 
     Dev-related vars:
         PYTHONPATH=/Users/emb/Documents/git-repos/test-uptimeproxy/src
@@ -117,18 +120,58 @@ Once you have set up your `.env` file, you may activate your virtual environment
         GUNICORN_APP=hello:app
 
     Heroku-related vars:
-        HEROKU_APP=<your-app>
-        HEROKU_URL=https://<your-app>.herokuapp.com/
-        HEROKU_GIT=https://git.heroku.com/<your-app>.git
+        HEROKU_APP=
+        HEROKU_URL=https://.herokuapp.com/
+        HEROKU_GIT=https://git.heroku.com/.git
         DB_URI_VAR_NAME=
-        HEROKU_USERNAME=<your-username>
+        HEROKU_USERNAME=you@mail.com
         HEROKU_PASSWORD=xxx
+
+One important value is missing here, `HEROKU_APP`, which we will take care off in next step
 
 ### `make init-heroku`
 
+Your environment is now set up to use the Heroku toolbelt, thanks to heroku credentials. The following lines will create an app on Heroku (where uptime proxy will run), and a PostgreSQL database. This one will be used only if you set `STORAGE_TYPE` to `models.storage`, but it is created nevertheless (it is free!)
+
+    $ make init-heroku
+    heroku create  || true
+    Creating app... done, ⬢ cove-radio-43534
+    ...
+    Creating heroku-postgresql:hobby-dev on ⬢ cove-radio-43534... free
+    ...
+    Created postgresql-vertical-3453 as DATABASE_URL
+    ...
+    replace HEROKU_APP vars in your .env file
+    run 'heroku run init' when done
+
 ### `HEROKU_APP`
 
-- `HEROKU_APP`: the application name, returned by Heroku when you ran `make init-venv`
+go back to editing your `.env` file, and set `HEROKU_APP` to the application name returned above.
+
+You are now set for your first deployment, and the initialization of your DB
+
+    $ make deploy
+    flake8 src --max-line-length=120
+    pytest --cov=src test
+    ...
+    collected 19 items
+    ...
+    ======== 19 passed in 0.92 seconds ========
+    git push heroku master
+    Counting objects: 335, done.
+    ...
+    remote: Verifying deploy... done.
+    To https://git.heroku.com/cove-radio-43534.git
+     * [new branch]      master -> master
+
+    $ heroku run init
+    Running init on ⬢ cove-radio-43534... up, run.8706 (Free)
+    WARNING:root:The optional environment variable APP_SECRET is not set, using 'bf34f504-0c1d-421c-9b9b-aa99f5e89a58' as default
+    WARNING:root:The optional environment variable DB_URI_VAR_NAME is not set, using 'DATABASE_URL' as default
+
+You are are set!
+
+You can access your instance on https://cove-radio-43534.herokuapp.com/
 
 ## Your dev environment
 
@@ -142,4 +185,4 @@ Once you have set up your `.env` file, you may activate your virtual environment
 
 ## Deploying to Heroku
 
-### `make deploy`
+Deploying is as simple as running `make deploy`. The command will run the test first, and -if tests are successful- push the code to heroku and restart the app
