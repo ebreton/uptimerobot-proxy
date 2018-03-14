@@ -72,11 +72,11 @@ ifeq (,$(wildcard ./src/gunicorn.db))
 endif
 	STORAGE_TYPE=models.storage DATABASE_URL=sqlite:///gunicorn.db gunicorn ${GUNICORN_APP}
 
-heroku: test
+heroku:
 	STORAGE_TYPE=models.storage DATABASE_URL=postgres://127.0.0.1/$(whoami) python src/commands.py init-db
 	STORAGE_TYPE=models.storage DATABASE_URL=postgres://127.0.0.1/$(whoami) heroku local -p 7000
 
-deploy: test
+deploy:
 	git push heroku master
 
 check-env:
