@@ -19,6 +19,7 @@ Table of contents
 - [Uptime Robot setup](#uptime-robot-setup)
 - [Your dev environment](#your-dev-environment)
     - [`pipenv shell`](#pipenv-shell)
+    - [`make test`](#make-test)
     - [`make run`](#make-run)
     - [`make gunicorn`](#make-gunicorn)
     - [`make heroku`](#make-heroku)
@@ -34,6 +35,7 @@ Table of contents
 1. Sign up at [Heroku](https://www.heroku.com) (the [free plan](https://www.heroku.com/pricing) should cover your needs)
 1. Look for your EPFL [service ID](https://it.epfl.ch/help/?id=epfl_services_status)
 1. Install [GNU make](https://www.gnu.org/software/make/), [Heroku Toolbelt](https://devcenter.heroku.com/articles/heroku-cli),  [pipenv](http://pipenv.readthedocs.io/en/latest/) locally and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) if you do not have them already
+1. make sure you have installed the python version 3.6.4
 
         $ make --version
         GNU Make 3.81
@@ -44,6 +46,22 @@ Table of contents
         pipenv, version 9.0.3
         $ git --version
         git version 2.12.2
+        $ python3 --version
+        Python 3.6.4
+
+1. make sure your `LANG` and `LC_ALL` are set up in your environment variables
+
+        $ locale
+        LANG="fr_CH.UTF-8"
+        LC_COLLATE="fr_CH.UTF-8"
+        LC_CTYPE="fr_CH.UTF-8"
+        LC_MESSAGES="fr_CH.UTF-8"
+        LC_MONETARY="fr_CH.UTF-8"
+        LC_NUMERIC="fr_CH.UTF-8"
+        LC_TIME="fr_CH.UTF-8"
+        LC_ALL="fr_CH.UTF-8"
+
+If not, update your .bash_profile to export the correct values
 
 ### Main steps
 
@@ -195,6 +213,8 @@ Refer to [UptimeRobot.com](https://uptimerobot.com) for more details on those pr
 
 ### `pipenv shell`
 
+### `make test`
+
 ### `make run`
 
 ### `make gunicorn`
@@ -203,4 +223,4 @@ Refer to [UptimeRobot.com](https://uptimerobot.com) for more details on those pr
 
 ## Deploying to Heroku
 
-Deploying is as simple as running `make deploy`. The command will run the test first, and -if tests are successful- push the code to heroku and restart the app
+Deploying is as simple as running `make deploy`
